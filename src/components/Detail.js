@@ -1,45 +1,56 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useParams } from 'react-router'
+
+import db from '../firebase'
 
 const Detail = () => {
+	const { id } = useParams()
+	const [movie, setMovie] = useState()
+
+	useEffect(() => {
+		db.collection('movies')
+			.doc(id)
+			.get()
+			.then((doc) => {
+				if (doc) {
+					setMovie(doc.data())
+				} else {
+				}
+			})
+	}, [id])
+	console.log(movie)
+
 	return (
 		<Container>
-			<Background>
-				<img
-					alt="img"
-					src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/B409C2A425D58C32D822EB633C7CAE3DC910DC2FC62D2B1807A0BB092C531E9A/scale?width=1440&aspectRatio=1.78&format=jpeg"
-				/>
-			</Background>
-			<ImageTitle>
-				<img
-					alt="logo"
-					src="https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/2041CE26663867FC4EF20377B8625BD629E619452E23BCDB1AB259DD475C2EA1/scale?width=1440&aspectRatio=1.78"
-				/>
-			</ImageTitle>
-			<Controls>
-				<PlayButton>
-					<img src="/images/play-icon-black.png" alt="play" />
-					<span>PLAY</span>
-				</PlayButton>
-				<TrailerButton>
-					<img src="/images/play-icon-white.png" alt="play" />
-					<span>TRAILER</span>
-				</TrailerButton>
-				<AddButton>
-					<span>+</span>
-				</AddButton>
-				<GroupWatchButton>
-					<img src="/images/group-icon.png" alt="group" />
-				</GroupWatchButton>
-			</Controls>
-			<SubTitle>2018 • 1h 58m • Science Fiction, Family, Animation, Action-Adventure</SubTitle>
-			<Description>
-				While Helen is called on to lead a campaign to bring back the Supers, Bob navigates the
-				day-to-day heroics of “normal” life at home with Violet, Dash and Jack-Jack, whose
-				superpowers are about to be discovered. Their mission is derailed, however, when a new
-				villain emerges with a brilliant and dangerous plot that threatens everything. But with
-				Frozone by their side, the Parrs can take on anything.
-			</Description>
+			{movie && (
+				<>
+					<Background>
+						<img alt="img" src={movie.backgroundImg} />
+					</Background>
+					<ImageTitle>
+						<img alt="logo" src={movie.titleImg} />
+					</ImageTitle>
+					<Controls>
+						<PlayButton>
+							<img src="/images/play-icon-black.png" alt="play" />
+							<span>PLAY</span>
+						</PlayButton>
+						<TrailerButton>
+							<img src="/images/play-icon-white.png" alt="play" />
+							<span>TRAILER</span>
+						</TrailerButton>
+						<AddButton>
+							<span>+</span>
+						</AddButton>
+						<GroupWatchButton>
+							<img src="/images/group-icon.png" alt="group" />
+						</GroupWatchButton>
+					</Controls>
+					<SubTitle>{movie.subTitle}</SubTitle>
+					<Description>{movie.description}</Description>
+				</>
+			)}
 		</Container>
 	)
 }
@@ -47,7 +58,7 @@ const Detail = () => {
 export default Detail
 
 const Container = styled.div`
-	min-height: calc(100vh-70px);
+	min-height: calc(100 vh-70px);
 	padding: 0px calc(3.5vw + 5px);
 	position: relative;
 	overflow-x: hidden;
@@ -98,19 +109,19 @@ const PlayButton = styled.button`
 	letter-spacing: 1.8px;
 	cursor: pointer;
 
-    @media (max-width: 768px) {
-    height: 45px;
-    padding: 0px 12px;
-    font-size: 12px;
-    margin: 0px 10px 0px 0px;
-
 	&:hover {
 		background: rgb(198, 198, 198);
 	}
 
-    img {
-      width: 25px;
-    }
+	img{
+		width: 25px;
+	}
+
+  @media (max-width: 768px) {
+	  height: 45px;
+	  padding: 0px 12px;
+	  font-size: 12px;
+	  margin: 0px 10px 0px 0px;
 `
 const TrailerButton = styled(PlayButton)`
 	background: rgba(0, 0, 0, 0.3);
