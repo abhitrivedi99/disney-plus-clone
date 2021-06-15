@@ -19,7 +19,6 @@ const Detail = () => {
 				}
 			})
 	}, [id])
-	console.log(movie)
 
 	return (
 		<Container>

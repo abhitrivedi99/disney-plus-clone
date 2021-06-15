@@ -15,7 +15,7 @@ const Home = () => {
 			let temp = snapshot.docs.map((doc) => {
 				return { id: doc.id, ...doc.data() }
 			})
-			// console.log(temp)
+
 			dispatch(setMovies(temp))
 		})
 	}, [dispatch])
